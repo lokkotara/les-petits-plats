@@ -1,9 +1,16 @@
 import {getAllRecipes} from "../dataManager.js"
+import {displayFilter, toggleFilter} from "../components/filter.js"
 let DOM;
 
 export default function injectPage(domTarget) {
   DOM = domTarget;
   showAllRecipes();
+  showFilters();
+  const containers = document.querySelectorAll(".filterContainer");
+  containers.forEach(container => {
+    console.log(container);
+    container.addEventListener("click", toggleFilter);
+  });
   }
 
   async function showAllRecipes() {
@@ -53,4 +60,31 @@ export default function injectPage(domTarget) {
       `
     }
     return htmlContent;
+  }
+
+  function showFilters() {
+    const domTarget = document.querySelector('.filterContainerWrapper');
+    const filters = [
+      {
+        name: "Ingredients",
+        list: [],
+        placeholder: "Rechercher un ingrédient",
+        color: "#3282F7"
+      }, {
+        name: "Appareils",
+        list: [],
+        placeholder: "Rechercher un appareil",
+        color: "#68D9A4"
+      }, {
+        name: "Ustensiles",
+        list: [],
+        placeholder: "Rechercher un ustensile",
+        color: "#ED6454"
+      }
+    ];
+    for (let i = 0; i < filters.length; i++) {
+      const filter = filters[i];
+      domTarget.innerHTML += displayFilter(filter.name, filter.list, filter.placeholder, filter.color);
+      
+    }
   }

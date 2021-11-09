@@ -1,3 +1,12 @@
+html {
+  font-family: Lato, system-ui, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  scroll-behavior: smooth;
+}
+:root {
+  font-family: Lato, system-ui, "Helvetica Neue", Arial, sans-serif;
+}
 .mainContainer {
   margin: 0 6rem;
 }
@@ -42,4 +51,16 @@
   display: -webkit-box;
   -webkit-line-clamp: 8; 
   -webkit-box-orient: vertical;
+}
+.filterContainerWrapper div:not(:first-child) {
+  margin-left: 1.5em;
+}
+.filterContainer {
+  min-width: 170px;
+  height: 69px;
+}
+.openedFilter {
+  background: transparent;
+  color: rgba(0, 0, 0, 0.65);
+  border: none;
 }
