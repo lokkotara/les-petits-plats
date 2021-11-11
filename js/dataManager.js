@@ -1,6 +1,10 @@
 let recipes = null;
 let src;
 
+function initDataManager(source){
+  src = source;
+}
+
 async function getAllRecipes() {
   if (recipes !== null) return recipes;
   try {
@@ -10,10 +14,6 @@ async function getAllRecipes() {
   } catch (error) {
     console.error(error);
   }
-}
-
-function initDataManager(source){
-  src = source;
 }
 
 export {

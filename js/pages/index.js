@@ -1,5 +1,5 @@
 import {getAllRecipes} from "../dataManager.js"
-import {displayFilter, toggleFilter} from "../components/filter.js"
+import {displayFilter, toggleFilter, getFilterList} from "../components/filter.js"
 let DOM;
 
 export default function injectPage(domTarget) {
@@ -8,8 +8,10 @@ export default function injectPage(domTarget) {
   showFilters();
   const containers = document.querySelectorAll(".filterContainer");
   containers.forEach(container => {
-    console.log(container);
-    container.addEventListener("click", toggleFilter);
+    const label = container.firstElementChild.firstElementChild,
+          span = label.firstElementChild,
+          icon = label.lastElementChild;
+    icon.addEventListener("click", toggleFilter.bind(null, span));
   });
   }
 
@@ -17,6 +19,7 @@ export default function injectPage(domTarget) {
     let content = "";
     try {
       const recipes = await getAllRecipes();
+      getFilterList(recipes);
       for (let i = 0; i < recipes.length; i++) {
         content += templateRecipe(recipes[i]);     
       }
@@ -67,16 +70,19 @@ export default function injectPage(domTarget) {
     const filters = [
       {
         name: "Ingredients",
+        id: "ingredient",
         list: [],
         placeholder: "Rechercher un ingrédient",
         color: "#3282F7"
       }, {
         name: "Appareils",
+        id: "appliance",
         list: [],
         placeholder: "Rechercher un appareil",
         color: "#68D9A4"
       }, {
         name: "Ustensiles",
+        id: "ustensil",
         list: [],
         placeholder: "Rechercher un ustensile",
         color: "#ED6454"
@@ -84,7 +90,7 @@ export default function injectPage(domTarget) {
     ];
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      domTarget.innerHTML += displayFilter(filter.name, filter.list, filter.placeholder, filter.color);
+      domTarget.innerHTML += displayFilter(filter);
       
     }
   }
