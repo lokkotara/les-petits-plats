@@ -1,11 +1,12 @@
-import {getAllRecipes} from "../dataManager.js"
+import {initDataManager, getAllRecipes} from "../dataManager.js"
 import {displayFilter, toggleFilter, getFilterList} from "../components/filter.js"
 let DOM;
 
-export default function injectPage(domTarget) {
+export default async function injectPage(domTarget) {
   DOM = domTarget;
-  showAllRecipes();
+  await initDataManager();
   showFilters();
+  showAllRecipes();
   const containers = document.querySelectorAll(".filterContainer");
   containers.forEach(container => {
     const label = container.firstElementChild.firstElementChild,
@@ -15,10 +16,10 @@ export default function injectPage(domTarget) {
   });
   }
 
-  async function showAllRecipes() {
+  function showAllRecipes() {
     let content = "";
     try {
-      const recipes = await getAllRecipes();
+      const recipes = getAllRecipes();
       getFilterList(recipes);
       for (let i = 0; i < recipes.length; i++) {
         content += templateRecipe(recipes[i]);     

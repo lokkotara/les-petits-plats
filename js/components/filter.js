@@ -1,4 +1,4 @@
-
+import {normalizeWord} from "../dataManager.js"
 
 function displayFilter(filter) {
   return `
@@ -40,28 +40,32 @@ function getFilterList(recipes) {
         ustensilListContainer = document.getElementById('ustensilFilterList');
   let ingredientList = [],
       applianceList = [],
-      ustensilList = [];
+      applianceDisplayList = [],
+      ustensilList = [],
+      ustensilDisplayList = [];
 
   recipes.forEach(recipe => {
     recipe.ingredients.forEach(ingredient => {
-      if(!ingredientList.includes(ingredient.ingredient))
-      ingredientList.push(ingredient.ingredient);
+      // console.log(normalizeWord(ingredient.ingredient) +' : '+ingredientList.includes(normalizeWord(ingredient.ingredient)));
+      // if(!ingredientList.includes(normalizeWord(ingredient.ingredient)))
+      ingredientList.push(normalizeWord(ingredient.ingredient));
+      // ingredientDisplayList.push(ingredient.ingredient);
     })
 
-    if(!applianceList.includes(recipe.appliance)) {
-      applianceList.push(recipe.appliance);
+    if(!applianceList.includes(normalizeWord(recipe.appliance))) {
+      applianceList.push(normalizeWord(recipe.appliance));
+      applianceDisplayList.push(recipe.appliance);
     }
 
     recipe.ustensils.forEach(ustensil => {
-      if(!ustensilList.includes(ustensil))
-      ustensilList.push(ustensil);
+        if(normalizeWord(ustensil).length >2 && !ustensilList.includes(normalizeWord(ustensil)))
+        ustensilList.push(normalizeWord(ustensil));
+        ustensilDisplayList.push(ustensil);
     })
   })
-
-  const ingredientSortedList = ingredientList.sort(),
-        applianceSortedList = applianceList.sort(),
-        ustensilSortedList = ustensilList.sort();
-
+  const ingredientSortedList = [...new Set(ingredientList)].sort(),
+        applianceSortedList = [...new Set(applianceList)].sort(),
+        ustensilSortedList = [...new Set(ustensilList)].sort();
   ingredientListContainer.innerHTML = templateFilterList(ingredientSortedList);
   applianceListContainer.innerHTML = templateFilterList(applianceSortedList);
   ustensilListContainer.innerHTML = templateFilterList(ustensilSortedList);
