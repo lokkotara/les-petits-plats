@@ -1,4 +1,4 @@
-import {normalizeWord} from "../dataManager.js"
+import {normalizeWord, getUstensilsList} from "../dataManager.js"
 
 function displayFilter(filter) {
   return `
@@ -40,27 +40,18 @@ function getFilterList(recipes) {
         ustensilListContainer = document.getElementById('ustensilFilterList');
   let ingredientList = [],
       applianceList = [],
-      applianceDisplayList = [],
-      ustensilList = [],
-      ustensilDisplayList = [];
+      ustensilList = [];
 
   recipes.forEach(recipe => {
     recipe.ingredients.forEach(ingredient => {
-      // console.log(normalizeWord(ingredient.ingredient) +' : '+ingredientList.includes(normalizeWord(ingredient.ingredient)));
-      // if(!ingredientList.includes(normalizeWord(ingredient.ingredient)))
       ingredientList.push(normalizeWord(ingredient.ingredient));
-      // ingredientDisplayList.push(ingredient.ingredient);
     })
 
-    if(!applianceList.includes(normalizeWord(recipe.appliance))) {
-      applianceList.push(normalizeWord(recipe.appliance));
-      applianceDisplayList.push(recipe.appliance);
-    }
+    applianceList.push(normalizeWord(recipe.appliance));
 
     recipe.ustensils.forEach(ustensil => {
-        if(normalizeWord(ustensil).length >2 && !ustensilList.includes(normalizeWord(ustensil)))
+      let id = recipe.id;
         ustensilList.push(normalizeWord(ustensil));
-        ustensilDisplayList.push(ustensil);
     })
   })
   const ingredientSortedList = [...new Set(ingredientList)].sort(),
@@ -82,8 +73,21 @@ function templateFilterList(list) {
   return htmlContent;
 }
 
+function getFilterInput() {
+  let ingredient = document.getElementById('ingredient');
+  let inputToSearch;
+  ingredient.addEventListener('input', (event) => {
+    inputToSearch = event.target.value;
+    if(inputToSearch.length > 2) {
+      console.log(inputToSearch);
+    }
+  })
+}
+
+
 export {
   displayFilter,
   getFilterList,
-  toggleFilter
+  toggleFilter,
+  getFilterInput
 }

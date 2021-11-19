@@ -1,12 +1,14 @@
-import {initDataManager, getAllRecipes} from "../dataManager.js"
-import {displayFilter, toggleFilter, getFilterList} from "../components/filter.js"
+import {initDataManager, getAllRecipes, getUstensilsList, getRecipeList, normalizeWord} from "../dataManager.js"
+import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
 let DOM;
 
 export default async function injectPage(domTarget) {
   DOM = domTarget;
   await initDataManager();
   showFilters();
+  getFilterInput();
   showAllRecipes();
+  getSearchInput();
   const containers = document.querySelectorAll(".filterContainer");
   containers.forEach(container => {
     const label = container.firstElementChild.firstElementChild,
@@ -34,7 +36,7 @@ export default async function injectPage(domTarget) {
     return /*html*/`
   <article class="recipeCard rounded d-flex flex-column mb-5 overflow-hidden">
     <div class="h-50">
-      <img src="https://via.placeholder.com/380.jpg?text=${recipe.name} " alt="Limonade à la noix de coco" class="h-100 w-100">
+      <img src="https://via.placeholder.com/380.jpg?text=${recipe.name} " alt="${recipe.name}" class="h-100 w-100">
     </div>
     <div class="d-flex flex-column recipeCardText h-50">
       <div class="d-flex justify-content-between p-2 px-4 align-items-center">
@@ -94,4 +96,15 @@ export default async function injectPage(domTarget) {
       domTarget.innerHTML += displayFilter(filter);
       
     }
+  }
+
+  function getSearchInput() {
+    let ingredient = document.getElementById('searchInput');
+    let inputToSearch;
+    ingredient.addEventListener('input', (event) => {
+      inputToSearch = event.target.value;
+      if(inputToSearch.length > 2) {
+        getRecipeList(normalizeWord(inputToSearch));
+      }
+    })
   }
