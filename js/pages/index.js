@@ -16,7 +16,7 @@ export default async function injectPage(domTarget) {
           icon = label.lastElementChild;
     icon.addEventListener("click", toggleFilter.bind(null, span));
   });
-  }
+}
 
   function showAllRecipes() {
     let content = "";
@@ -103,8 +103,8 @@ export default async function injectPage(domTarget) {
     let inputToSearch;
     ingredient.addEventListener('input', (event) => {
       inputToSearch = event.target.value;
-      if(inputToSearch.length > 2) {
-        getRecipeList(normalizeWord(inputToSearch));
-      }
+      let newValue = inputToSearch.split(" ");
+      let map = newValue.map(item=>normalizeWord(item))
+      getRecipeList(map);
     })
   }

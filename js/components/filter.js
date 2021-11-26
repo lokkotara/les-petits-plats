@@ -1,4 +1,4 @@
-import {normalizeWord, getUstensilsList} from "../dataManager.js"
+import {normalizeWord, getUstensilsList, getListFromInput} from "../dataManager.js"
 
 function displayFilter(filter) {
   return `
@@ -80,6 +80,7 @@ function getFilterInput() {
     inputToSearch = event.target.value;
     if(inputToSearch.length > 2) {
       console.log(inputToSearch);
+      getListFromInput(inputToSearch);
     }
   })
 }
