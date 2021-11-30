@@ -1,12 +1,12 @@
-import {initDataManager, getAllRecipes, getUstensilsList, getRecipeList, normalizeWord} from "../dataManager.js"
-import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
+import {initDataManager, getAllRecipes, normalizeWord, recipeListFromIdArray, saveText} from "../dataManager.js"
+// import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
 let DOM;
 
 export default async function injectPage(domTarget) {
   DOM = domTarget;
   await initDataManager();
-  showFilters();
-  getFilterInput();
+  // showFilters();
+  // getFilterInput();
   showAllRecipes();
   getSearchInput();
   const containers = document.querySelectorAll(".filterContainer");
@@ -21,8 +21,10 @@ export default async function injectPage(domTarget) {
   function showAllRecipes() {
     let content = "";
     try {
-      const recipes = getAllRecipes();
-      getFilterList(recipes);
+      // console.log(getAllRecipes());
+      const recipes = recipeListFromIdArray(getAllRecipes());
+      console.log(recipes);
+      // getFilterList(recipes);
       for (let i = 0; i < recipes.length; i++) {
         content += templateRecipe(recipes[i]);     
       }
@@ -68,35 +70,35 @@ export default async function injectPage(domTarget) {
     return htmlContent;
   }
 
-  function showFilters() {
-    const domTarget = document.querySelector('.filterContainerWrapper');
-    const filters = [
-      {
-        name: "Ingredients",
-        id: "ingredient",
-        list: [],
-        placeholder: "Rechercher un ingrédient",
-        color: "#3282F7"
-      }, {
-        name: "Appareils",
-        id: "appliance",
-        list: [],
-        placeholder: "Rechercher un appareil",
-        color: "#68D9A4"
-      }, {
-        name: "Ustensiles",
-        id: "ustensil",
-        list: [],
-        placeholder: "Rechercher un ustensile",
-        color: "#ED6454"
-      }
-    ];
-    for (let i = 0; i < filters.length; i++) {
-      const filter = filters[i];
-      domTarget.innerHTML += displayFilter(filter);
+  // function showFilters() {
+  //   const domTarget = document.querySelector('.filterContainerWrapper');
+  //   const filters = [
+  //     {
+  //       name: "Ingredients",
+  //       id: "ingredient",
+  //       list: [],
+  //       placeholder: "Rechercher un ingrédient",
+  //       color: "#3282F7"
+  //     }, {
+  //       name: "Appareils",
+  //       id: "appliance",
+  //       list: [],
+  //       placeholder: "Rechercher un appareil",
+  //       color: "#68D9A4"
+  //     }, {
+  //       name: "Ustensiles",
+  //       id: "ustensil",
+  //       list: [],
+  //       placeholder: "Rechercher un ustensile",
+  //       color: "#ED6454"
+  //     }
+  //   ];
+  //   for (let i = 0; i < filters.length; i++) {
+  //     const filter = filters[i];
+  //     domTarget.innerHTML += displayFilter(filter);
       
-    }
-  }
+  //   }
+  // }
 
   function getSearchInput() {
     let ingredient = document.getElementById('searchInput');
@@ -105,6 +107,13 @@ export default async function injectPage(domTarget) {
       inputToSearch = event.target.value;
       let newValue = inputToSearch.split(" ");
       let map = newValue.map(item=>normalizeWord(item))
-      getRecipeList(map);
+      console.log(map);
+      map.forEach(elt=> {
+        if(elt!== undefined && elt.length>2) {
+          saveText(elt)
+        }
+      })
+      // getRecipeList(map);
+      showAllRecipes();
     })
   }
