@@ -5,17 +5,18 @@ import {initDataManager,
   getArrayFromInput,
   filterByText
 } from "../dataManager.js"
-import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
+import {displayFilter, toggleFilter, displayFiltersList, getFilterInput} from "../components/filter.js"
 let DOM;
 
 export default async function injectPage(domTarget) {
   DOM = domTarget;
   await initDataManager();
-  showFilters();
-  getFilterInput();
   showAllRecipes();
-  addFilterListener();
   addSearchListener();
+  showFilters();
+  displayFiltersList();
+  addFilterListener();
+  getFilterInput();
 }
 function addFilterListener() {
   const containers = document.querySelectorAll(".filterContainer");
@@ -124,7 +125,6 @@ function getRecipesToDisplay() {
       domTarget.innerHTML += displayFilter(filter);
       
     }
-    console.log("j'affiche le nom de ul");
   }
 
   function getSearchInput() {

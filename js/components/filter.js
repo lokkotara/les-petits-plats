@@ -1,4 +1,4 @@
-import {normalizeWord, getListFromInput} from "../dataManager.js"
+import {normalizeWord, getListFromInput, getFiltersList} from "../dataManager.js"
 
 function displayFilter(filter) {
   return `
@@ -34,7 +34,8 @@ function toggleFilter(elt) {
   icon.classList.toggle('fa-chevron-up');
 }
 
-function getFilterList(recipes) {
+function displayFiltersList(recipesList) {
+  let recipes = getFiltersList();
   const ingredientListContainer = document.getElementById('ingredientFilterList'),
         applianceListContainer = document.getElementById('applianceFilterList'),
         ustensilListContainer = document.getElementById('ustensilFilterList');
@@ -88,7 +89,7 @@ function getFilterInput() {
 
 export {
   displayFilter,
-  getFilterList,
+  displayFiltersList,
   toggleFilter,
   getFilterInput
 }

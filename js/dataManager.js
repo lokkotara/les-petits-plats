@@ -1,6 +1,3 @@
-import {getFilterList} from "./components/filter.js"
-
-
 let recipes = null;
 let src;
 
@@ -26,11 +23,13 @@ async function initDataManager() {
     textsHashed = getHashRecipeList();
     // debug();
     prevIdRecipes = getAllId()
-    console.log("j'importe les listes pour les injecter");
-    getFilterList(recipes)
   } catch (error) {
     console.error(error);
   }
+}
+
+function getFiltersList() {
+  return recipes;
 }
 
 function setDataManagerSource(source) {
@@ -226,4 +225,5 @@ export {
   // getUstensilsList,
   getRecipeList,
   getListFromInput,
+  getFiltersList,
 };
