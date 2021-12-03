@@ -1,3 +1,6 @@
+import {getFilterList} from "./components/filter.js"
+
+
 let recipes = null;
 let src;
 
@@ -7,11 +10,6 @@ const activesFilters = {
   ingredients: [],
   text: "",
 };
-
-// const recipeList = {};
-// const ustensilsList = {};
-// const ingredientsList = {};
-// const applianceList = {};
 
 const ingredientsHashed = {};
 const applianceHashed = {};
@@ -26,8 +24,10 @@ async function initDataManager() {
     const response = await fetch(src);
     recipes = await response.json();
     textsHashed = getHashRecipeList();
-    debug()
+    // debug();
     prevIdRecipes = getAllId()
+    console.log("j'importe les listes pour les injecter");
+    getFilterList(recipes)
   } catch (error) {
     console.error(error);
   }
@@ -41,15 +41,6 @@ function debug(){
   activesFilters.text = "";
   // console.log(getAllRecipes())
 }
-// let old;
-// function saveText(text) {
-//   if(text.length<3) {
-//     activesFilters.text = "";
-//   } else {
-//     activesFilters.text = normalizeWord(text);
-//   }
-//   old = text;
-// }
 
 function getAllId(){
   const ids = [];
@@ -60,7 +51,6 @@ function getAllId(){
 }
 
 function filterByText(source){
-  console.log(activesFilters.text);
   if (activesFilters.text === "") return source;
   return getIntersectArray(source, textsHashed[activesFilters.text]);
 }
@@ -76,10 +66,6 @@ function removeFilterTag(type, value){
     case "ingredients" : prevIdIngredients = null; break;
   }
 }
-// function getBasicRecipes() {
-//   prevIdRecipes = null;
-//   return filterByText(getAllId());
-// }
 
 function getAllRecipes() {
   prevIdRecipes =  filterByText(prevIdRecipes);
@@ -135,20 +121,24 @@ function recipeListFromIdArray(idArray) {
   return result;
 }
 
-// function getRecipeList(array) {
-//   let tempArray = [];
-//   array.forEach(word => {
-//     if(word !== undefined && word.length > 2) {
-//       if(recipeList[normalizeWord(word)] !== undefined) {
-//         console.log(recipes);
-//         recipes = recipeListFromIdArray(recipeList[normalizeWord(word)]);
-//         console.log(recipes);
-//       } else {
-//       console.log("Aucune recette ne correspond à votre crit\ère... Vous pouvez chercher \"tarte aux pommes\", \"poisson\", etc.");
-//       }
-//     }
-//   });
-// }
+function getArrayFromInput(word) {
+  activesFilters.text = word;
+  return textsHashed[activesFilters.text];
+}
+function getRecipeList(array) {
+  let tempArray = [];
+  array.forEach(word => {
+    if(word !== undefined && word.length > 2) {
+      if(recipeList[normalizeWord(word)] !== undefined) {
+        console.log(recipes);
+        recipes = recipeListFromIdArray(recipeList[normalizeWord(word)]);
+        console.log(recipes);
+      } else {
+      console.log("Aucune recette ne correspond à votre crit\ère... Vous pouvez chercher \"tarte aux pommes\", \"poisson\", etc.");
+      }
+    }
+  });
+}
 
 function getHashRecipeList() {
   let words;
@@ -156,7 +146,6 @@ function getHashRecipeList() {
   let wordFragment;
   const list = {};
   recipes.forEach((recipe) => {
-    // console.log(recipe.name);
     sentence = recipe.name.toLowerCase();
     words = sentence.split(" ");
     words.forEach((word) => {
@@ -209,13 +198,13 @@ function getHashRecipeList() {
 //   return list;
 // }
 
-// function getListFromInput(value) {
-//   value = normalizeWord(value);
-//   console.log(recipeList[value]);
-// }
+function getListFromInput(value) {
+  value = normalizeWord(value);
+  console.log(recipeList[value]);
+}
 
 function normalizeWord(word) {
-  if(word.length>1) {
+  if(word.length>0) {
     const regex = /\.+/g;
   const lowerCasedWord = word.toLowerCase();
   const normalizedWord = lowerCasedWord
@@ -226,22 +215,15 @@ function normalizeWord(word) {
   }
 }
 
-// const getUstensilsList = () => {};
-// const normalizeWord = () => {};
-// // const getAllRecipes = () => {};
-// const getRecipeList = () => {};
-// const getListFromInput = () => {};
-
 export {
   initDataManager,
   getAllRecipes,
   normalizeWord,
   setDataManagerSource,
-  // saveText,
   recipeListFromIdArray,
   filterByText,
-  // getBasicRecipes,
+  getArrayFromInput,
   // getUstensilsList,
-  // getRecipeList,
-  // getListFromInput,
+  getRecipeList,
+  getListFromInput,
 };

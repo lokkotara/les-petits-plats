@@ -2,22 +2,20 @@ import {initDataManager,
   getAllRecipes, 
   normalizeWord, 
   recipeListFromIdArray, 
-  // saveText, 
-  // getBasicRecipes, 
+  getArrayFromInput,
   filterByText
 } from "../dataManager.js"
-// import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
+import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
 let DOM;
 
 export default async function injectPage(domTarget) {
   DOM = domTarget;
   await initDataManager();
-  // showFilters();
-  // getFilterInput();
+  showFilters();
+  getFilterInput();
   showAllRecipes();
   addFilterListener();
   addSearchListener();
-  addTestListener();
 }
 function addFilterListener() {
   const containers = document.querySelectorAll(".filterContainer");
@@ -32,37 +30,27 @@ function addFilterListener() {
 function addSearchListener() {
   const input = document.getElementById('searchInput');
   input.addEventListener("input",()=> {
-    console.log(getSearchInput());
-    let arrayToShow = getSearchInput();
+    getRecipesToDisplay();
   })
 }
 
-function addTestListener() {
-  const input = document.getElementById('testBtn');
-  input.addEventListener("click",()=> {
-    testRecipes();
-  })
-}
-
-function testRecipes() {
-  const array = [1, 3, 19, 25, 34]
-  showAllRecipes(array);
+function getRecipesToDisplay() {
+  const word = getSearchInput();
+  if(word !== undefined && word.length>2) {
+    let arrayToShow = getArrayFromInput(word);
+    showAllRecipes(arrayToShow);
+  }
 }
 
   function showAllRecipes(recipesIdList) {
     let content = "";
     let recipes = [];
     try {
-      // console.log(getAllRecipes());
-      // let recipes = recipeListFromIdArray(getAllRecipes());
       if (recipesIdList === undefined) {
         recipes = recipeListFromIdArray(getAllRecipes());
-        console.log("***", recipes);
       } else {
         recipes = recipeListFromIdArray(recipesIdList);
       }
-      // console.log(recipes);
-      // getFilterList(recipes);
       for (let i = 0; i < recipes.length; i++) {
         content += templateRecipe(recipes[i]);     
       }
@@ -108,66 +96,39 @@ function testRecipes() {
     return htmlContent;
   }
 
-  // function showFilters() {
-  //   const domTarget = document.querySelector('.filterContainerWrapper');
-  //   const filters = [
-  //     {
-  //       name: "Ingredients",
-  //       id: "ingredient",
-  //       list: [],
-  //       placeholder: "Rechercher un ingrédient",
-  //       color: "#3282F7"
-  //     }, {
-  //       name: "Appareils",
-  //       id: "appliance",
-  //       list: [],
-  //       placeholder: "Rechercher un appareil",
-  //       color: "#68D9A4"
-  //     }, {
-  //       name: "Ustensiles",
-  //       id: "ustensil",
-  //       list: [],
-  //       placeholder: "Rechercher un ustensile",
-  //       color: "#ED6454"
-  //     }
-  //   ];
-  //   for (let i = 0; i < filters.length; i++) {
-  //     const filter = filters[i];
-  //     domTarget.innerHTML += displayFilter(filter);
+  function showFilters() {
+    const domTarget = document.querySelector('.filterContainerWrapper');
+    const filters = [
+      {
+        name: "Ingredients",
+        id: "ingredient",
+        list: [],
+        placeholder: "Rechercher un ingrédient",
+        color: "#3282F7"
+      }, {
+        name: "Appareils",
+        id: "appliance",
+        list: [],
+        placeholder: "Rechercher un appareil",
+        color: "#68D9A4"
+      }, {
+        name: "Ustensiles",
+        id: "ustensil",
+        list: [],
+        placeholder: "Rechercher un ustensile",
+        color: "#ED6454"
+      }
+    ];
+    for (let i = 0; i < filters.length; i++) {
+      const filter = filters[i];
+      domTarget.innerHTML += displayFilter(filter);
       
-  //   }
-  // }
+    }
+    console.log("j'affiche le nom de ul");
+  }
 
   function getSearchInput() {
     let ingredient = document.getElementById('searchInput');
-    // let inputToSearch ;
-    // let old;
-    return ingredient.value;
-    // ingredient.addEventListener('input', (event) => {
-      // return event.target.value;
-      // saveText(inputToSearch);
-      // if(inputToSearch === '') {
-      //   getAllRecipes();
-      // }
-      // if (old !== undefined && inputToSearch.length <= old.length) {
-      //   getBasicRecipes();
-      // }
-      // old = inputToSearch;
+    return normalizeWord(ingredient.value);
 
-      // let newValue = inputToSearch.split(" ");
-      // let map = newValue.map(item=>normalizeWord(item))
-      // // console.log(map);
-      // map.forEach(elt=> {
-      //   if(elt!== undefined ) {
-      //     console.log("tik");
-      //     saveText(elt)
-      //   }
-      // })
-      // getRecipeList(map);
-      // showAllRecipes();
-    // })
-  }
-  function getListToDisplay() {
-    let input = getSearchInput();
-    console.log(input);
   }
