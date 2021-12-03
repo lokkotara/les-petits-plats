@@ -38,14 +38,18 @@ function setDataManagerSource(source) {
 }
 
 function debug(){
-  activesFilters.text = "Cre";
+  activesFilters.text = "";
   // console.log(getAllRecipes())
 }
-
-function saveText(text) {
-  activesFilters.text = normalizeWord(text);
-  console.log(activesFilters.text);
-}
+// let old;
+// function saveText(text) {
+//   if(text.length<3) {
+//     activesFilters.text = "";
+//   } else {
+//     activesFilters.text = normalizeWord(text);
+//   }
+//   old = text;
+// }
 
 function getAllId(){
   const ids = [];
@@ -56,6 +60,7 @@ function getAllId(){
 }
 
 function filterByText(source){
+  console.log(activesFilters.text);
   if (activesFilters.text === "") return source;
   return getIntersectArray(source, textsHashed[activesFilters.text]);
 }
@@ -71,12 +76,13 @@ function removeFilterTag(type, value){
     case "ingredients" : prevIdIngredients = null; break;
   }
 }
-
+// function getBasicRecipes() {
+//   prevIdRecipes = null;
+//   return filterByText(getAllId());
+// }
 
 function getAllRecipes() {
-  console.log("1."+prevIdRecipes);
   prevIdRecipes =  filterByText(prevIdRecipes);
-  console.log("2."+prevIdRecipes);
   // prevIdRecipes = filterByAppliance(prevIdRecipes)
   return  prevIdRecipes;
 
@@ -231,8 +237,10 @@ export {
   getAllRecipes,
   normalizeWord,
   setDataManagerSource,
-  saveText,
+  // saveText,
   recipeListFromIdArray,
+  filterByText,
+  // getBasicRecipes,
   // getUstensilsList,
   // getRecipeList,
   // getListFromInput,

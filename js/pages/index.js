@@ -1,4 +1,11 @@
-import {initDataManager, getAllRecipes, normalizeWord, recipeListFromIdArray, saveText} from "../dataManager.js"
+import {initDataManager, 
+  getAllRecipes, 
+  normalizeWord, 
+  recipeListFromIdArray, 
+  // saveText, 
+  // getBasicRecipes, 
+  filterByText
+} from "../dataManager.js"
 // import {displayFilter, toggleFilter, getFilterList, getFilterInput} from "../components/filter.js"
 let DOM;
 
@@ -8,7 +15,11 @@ export default async function injectPage(domTarget) {
   // showFilters();
   // getFilterInput();
   showAllRecipes();
-  getSearchInput();
+  addFilterListener();
+  addSearchListener();
+  addTestListener();
+}
+function addFilterListener() {
   const containers = document.querySelectorAll(".filterContainer");
   containers.forEach(container => {
     const label = container.firstElementChild.firstElementChild,
@@ -18,12 +29,39 @@ export default async function injectPage(domTarget) {
   });
 }
 
-  function showAllRecipes() {
+function addSearchListener() {
+  const input = document.getElementById('searchInput');
+  input.addEventListener("input",()=> {
+    console.log(getSearchInput());
+    let arrayToShow = getSearchInput();
+  })
+}
+
+function addTestListener() {
+  const input = document.getElementById('testBtn');
+  input.addEventListener("click",()=> {
+    testRecipes();
+  })
+}
+
+function testRecipes() {
+  const array = [1, 3, 19, 25, 34]
+  showAllRecipes(array);
+}
+
+  function showAllRecipes(recipesIdList) {
     let content = "";
+    let recipes = [];
     try {
       // console.log(getAllRecipes());
-      const recipes = recipeListFromIdArray(getAllRecipes());
-      console.log(recipes);
+      // let recipes = recipeListFromIdArray(getAllRecipes());
+      if (recipesIdList === undefined) {
+        recipes = recipeListFromIdArray(getAllRecipes());
+        console.log("***", recipes);
+      } else {
+        recipes = recipeListFromIdArray(recipesIdList);
+      }
+      // console.log(recipes);
       // getFilterList(recipes);
       for (let i = 0; i < recipes.length; i++) {
         content += templateRecipe(recipes[i]);     
@@ -102,18 +140,34 @@ export default async function injectPage(domTarget) {
 
   function getSearchInput() {
     let ingredient = document.getElementById('searchInput');
-    let inputToSearch;
-    ingredient.addEventListener('input', (event) => {
-      inputToSearch = event.target.value;
-      let newValue = inputToSearch.split(" ");
-      let map = newValue.map(item=>normalizeWord(item))
-      console.log(map);
-      map.forEach(elt=> {
-        if(elt!== undefined && elt.length>2) {
-          saveText(elt)
-        }
-      })
+    // let inputToSearch ;
+    // let old;
+    return ingredient.value;
+    // ingredient.addEventListener('input', (event) => {
+      // return event.target.value;
+      // saveText(inputToSearch);
+      // if(inputToSearch === '') {
+      //   getAllRecipes();
+      // }
+      // if (old !== undefined && inputToSearch.length <= old.length) {
+      //   getBasicRecipes();
+      // }
+      // old = inputToSearch;
+
+      // let newValue = inputToSearch.split(" ");
+      // let map = newValue.map(item=>normalizeWord(item))
+      // // console.log(map);
+      // map.forEach(elt=> {
+      //   if(elt!== undefined ) {
+      //     console.log("tik");
+      //     saveText(elt)
+      //   }
+      // })
       // getRecipeList(map);
-      showAllRecipes();
-    })
+      // showAllRecipes();
+    // })
+  }
+  function getListToDisplay() {
+    let input = getSearchInput();
+    console.log(input);
   }
