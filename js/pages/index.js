@@ -37,6 +37,10 @@ function addSearchListener() {
   })
 }
 
+function test(){
+  //ceci est une démo des issues
+}
+
 function addTestListener() {
   const input = document.getElementById('testBtn');
   input.addEventListener("click",()=> {
