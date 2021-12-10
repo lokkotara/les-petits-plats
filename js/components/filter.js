@@ -80,16 +80,43 @@ function getFilterInput() {
   ingredient.addEventListener('input', (event) => {
     inputToSearch = event.target.value;
     if(inputToSearch.length > 2) {
-      console.log(inputToSearch);
       getListFromInput(inputToSearch);
     }
   })
 }
 
+function displayTag() {
+  let container = document.querySelector('.filterTagContainer');
+  const test = {
+    name: "Coco",
+    color: "#3282F7"
+  };
+  const tagToDisplay = templateTag(test['name'], test['color']);
+  container.innerHTML += tagToDisplay;
+}
+
+/**
+ * Retourne le template  du tag sélectionné
+ *
+ * @param   {string}  name   Le nom correspondant au tag choisi
+ * @param   {string}  color  La couleur correspondant à la liste de filtre à laquelle appartient le tag
+ *
+ * @return  {HTMLElement}         Retourne le tag
+ */
+function templateTag(name, color) {
+  const template = `
+    <span class="filterTag btn text-light" style="background-color: ${color}">
+      <span class="lh-1">${name}</span>
+      <span class="far fa-times-circle align-middle filterTagIcon lh-1"></span>
+    </span>
+  `;
+return template
+}
 
 export {
   displayFilter,
   displayFiltersList,
   toggleFilter,
-  getFilterInput
+  getFilterInput,
+  displayTag
 }

@@ -94,3 +94,10 @@ html {
 .filterChevron {
   cursor: pointer;
 }
+.filterTag {
+  /* width: 105px; */
+}
+.filterTagIcon {
+  width: 21px;
+  height: 21px;
+}

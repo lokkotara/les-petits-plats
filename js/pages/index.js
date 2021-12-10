@@ -3,9 +3,17 @@ import {initDataManager,
   normalizeWord, 
   recipeListFromIdArray, 
   getArrayFromInput,
+  getFiltersList,
   filterByText
 } from "../dataManager.js"
-import {displayFilter, toggleFilter, displayFiltersList, getFilterInput} from "../components/filter.js"
+
+import {displayFilter, 
+  toggleFilter, 
+  displayFiltersList, 
+  getFilterInput,
+  displayTag
+} from "../components/filter.js"
+
 let DOM;
 
 export default async function injectPage(domTarget) {
@@ -17,6 +25,7 @@ export default async function injectPage(domTarget) {
   displayFiltersList();
   addFilterListener();
   getFilterInput();
+  displayTag();
 }
 function addFilterListener() {
   const containers = document.querySelectorAll(".filterContainer");
@@ -32,6 +41,7 @@ function addSearchListener() {
   const input = document.getElementById('searchInput');
   input.addEventListener("input",()=> {
     getRecipesToDisplay();
+    displayFiltersList();
   })
 }
 
@@ -49,7 +59,9 @@ function getRecipesToDisplay() {
     try {
       if (recipesIdList === undefined) {
         recipes = recipeListFromIdArray(getAllRecipes());
+        getFiltersList(getAllRecipes());
       } else {
+        getAllRecipes(recipesIdList);
         recipes = recipeListFromIdArray(recipesIdList);
       }
       for (let i = 0; i < recipes.length; i++) {

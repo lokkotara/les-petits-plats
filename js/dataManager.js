@@ -37,7 +37,9 @@ function setDataManagerSource(source) {
 }
 
 function debug(){
-  activesFilters.text = "";
+  activesFilters.ingredients = ["Fraise", "Lait"];
+  // activesFilters.text = ["Coco", "Lait"];
+  // activesFilters.text = "Coco";
   // console.log(getAllRecipes())
 }
 
@@ -54,6 +56,11 @@ function filterByText(source){
   return getIntersectArray(source, textsHashed[activesFilters.text]);
 }
 
+function filterByIngredient(source){
+  if (activesFilters.ingredients.length < 1) return source;
+  
+}
+
 function addFilterTag(type, value){
   activesFilters[type].push(value);
 }
@@ -68,10 +75,13 @@ function removeFilterTag(type, value){
 
 function getAllRecipes() {
   prevIdRecipes =  filterByText(prevIdRecipes);
+  // prevIdRecipes = filterByUstensil(prevIdRecipes)
+  // prevIdRecipes = filterByIngredient(prevIdRecipes)
   // prevIdRecipes = filterByAppliance(prevIdRecipes)
   return  prevIdRecipes;
+}
 
-  // if(activesFilters['appliance'].length<1 && activesFilters['ustensils'].length<1 && activesFilters['ingredients'].length<1) {
+// if(activesFilters['appliance'].length<1 && activesFilters['ustensils'].length<1 && activesFilters['ingredients'].length<1) {
   //   return recipes;
   // }
   // console.log("il y a un filtre");
@@ -88,14 +98,6 @@ function getAllRecipes() {
 
   //   filteredList.filter(value => activesFilters['ingredients'].includes(value));
   // }
-  /*
-  si pas de filtres:  return recipes;
-  let filteredList = [];
-  pour chaque type on récupère le tableau des id de recettes et on croise avec le résultat des précédents que l'on stocke dans filteredList
-
-  on retourne les recettes filtrées (filteredList)
-  */
-}
 
 /**
  * Prend en paramètre 2 tableaux d'id et retourne un tableau avec uniquement les valeurs communes aux 2 tableaux
@@ -140,32 +142,68 @@ function getRecipeList(array) {
 }
 
 function getHashRecipeList() {
+  let iWords;
   let words;
+  let dWords;
+  let iSentence;
   let sentence;
+  let description;
+  let iWordFragment;
   let wordFragment;
+  let dWordFragment;
+  let ingredientsArray;
   const list = {};
   recipes.forEach((recipe) => {
+    ingredientsArray= recipe.ingredients;
+    ingredientsArray.forEach(ingredient=>{
+      iSentence =ingredient.ingredient.toLowerCase();
+      iWords = iSentence.split(" ");
+      iWords.forEach((word) => {
+        word = cleanWord(word);
+        if (word.length < 3) return;
+        for (let i = 3, size = word.length; i <= size; i++) {
+          iWordFragment = normalizeWord(word).slice(0, i);
+          if (list[iWordFragment] === undefined) list[iWordFragment] = [];
+          if (!list[iWordFragment].includes(recipe.id)) list[iWordFragment].push(recipe.id);
+        }
+      });
+    })
     sentence = recipe.name.toLowerCase();
+    description = recipe.description.toLowerCase();
+    dWords = description.split(" ");
     words = sentence.split(" ");
     words.forEach((word) => {
       if (word.length < 3) return;
       for (let i = 3, size = word.length; i <= size; i++) {
         wordFragment = normalizeWord(word).slice(0, i);
         if (list[wordFragment] === undefined) list[wordFragment] = [];
-        list[wordFragment].push(recipe.id);
+        if (!list[wordFragment].includes(recipe.id)) list[wordFragment].push(recipe.id);
+      }
+    });
+    dWords.forEach((word) => {
+      word = cleanWord(word);
+      if (word.length < 3) return;
+      for (let i = 3, size = word.length; i <= size; i++) {
+        dWordFragment = normalizeWord(word).slice(0, i);
+        if (list[dWordFragment] === undefined) list[dWordFragment] = [];
+        if (!list[dWordFragment].includes(recipe.id)) list[dWordFragment].push(recipe.id);
       }
     });
   });
   return list;
 }
 
+function cleanWord(word) {
+  const regexp = /[/,;().!0-9%:]/g;
+  return word.replace(regexp, '');
+}
 // function getSeparatedWord(string) {
 //   let stringArray = string.split(" ");
 //   return stringArray;
 // }
 
 // function removeTrashWords(array) {
-//   return array.filter(word=>word.length>3);
+//   return array.filter(word=>word.length>2);
 // }
 
 // function getApplianceList() {
