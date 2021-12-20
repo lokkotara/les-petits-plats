@@ -1,4 +1,4 @@
-import {normalizeWord, getListFromInput, getFiltersList} from "../dataManager.js"
+import {getAllWords, getFiltersList, getListFromInput, normalizeWord, recipeListFromIdArray} from "../dataManager.js";
 
 function displayFilter(filter) {
   return `
@@ -19,45 +19,45 @@ function displayFilter(filter) {
 }
 
 function toggleFilter(elt) {
-  let span = elt,
-      div = elt.parentNode,
-      label = div.parentNode,
-      icon = div.lastElementChild,
-      list = label.lastElementChild,
-      input = span.nextElementSibling;
+  const span = elt,
+    div = elt.parentNode,
+    label = div.parentNode,
+    icon = div.lastElementChild,
+    list = label.lastElementChild,
+    input = span.nextElementSibling;
 
-  label.parentNode.classList.toggle('open');
-  span.classList.toggle('hidden');
-  input.classList.toggle('hidden');
-  list.classList.toggle('hidden');
-  icon.classList.toggle('fa-chevron-down');
-  icon.classList.toggle('fa-chevron-up');
+  label.parentNode.classList.toggle("open");
+  span.classList.toggle("hidden");
+  input.classList.toggle("hidden");
+  list.classList.toggle("hidden");
+  icon.classList.toggle("fa-chevron-down");
+  icon.classList.toggle("fa-chevron-up");
 }
 
 function displayFiltersList(recipesList) {
-  let recipes = getFiltersList();
-  const ingredientListContainer = document.getElementById('ingredientFilterList'),
-        applianceListContainer = document.getElementById('applianceFilterList'),
-        ustensilListContainer = document.getElementById('ustensilFilterList');
-  let ingredientList = [],
-      applianceList = [],
-      ustensilList = [];
+  const recipes = recipesList !== undefined ? recipesList : getFiltersList();
+  const ingredientListContainer = document.getElementById("ingredientFilterList"),
+    applianceListContainer = document.getElementById("applianceFilterList"),
+    ustensilListContainer = document.getElementById("ustensilFilterList");
+  const ingredientList = [],
+    applianceList = [],
+    ustensilList = [];
 
   recipes.forEach(recipe => {
     recipe.ingredients.forEach(ingredient => {
       ingredientList.push(normalizeWord(ingredient.ingredient));
-    })
+    });
 
     applianceList.push(normalizeWord(recipe.appliance));
 
     recipe.ustensils.forEach(ustensil => {
-      let id = recipe.id;
-        ustensilList.push(normalizeWord(ustensil));
-    })
-  })
+      const id = recipe.id;
+      ustensilList.push(normalizeWord(ustensil));
+    });
+  });
   const ingredientSortedList = [...new Set(ingredientList)].sort(),
-        applianceSortedList = [...new Set(applianceList)].sort(),
-        ustensilSortedList = [...new Set(ustensilList)].sort();
+    applianceSortedList = [...new Set(applianceList)].sort(),
+    ustensilSortedList = [...new Set(ustensilList)].sort();
   ingredientListContainer.innerHTML = templateFilterList(ingredientSortedList);
   applianceListContainer.innerHTML = templateFilterList(applianceSortedList);
   ustensilListContainer.innerHTML = templateFilterList(ustensilSortedList);
@@ -68,30 +68,30 @@ function templateFilterList(list) {
   for (let i = 0; i < list.length; i++) {
     const elt = list[i];
     htmlContent += `
-    <li class="filterListItem"><span class="pe-3 itemSpan">${elt}</li>
-    `
+    <li class="filterListItem"><span class="pe-3 itemSpan" name="${elt}">${elt}</span></li>
+    `;
   }
   return htmlContent;
 }
 
 function getFilterInput() {
-  let ingredient = document.getElementById('ingredient');
+  const ingredient = document.getElementById("ingredient");
   let inputToSearch;
-  ingredient.addEventListener('input', (event) => {
+  ingredient.addEventListener("input", (event) => {
     inputToSearch = event.target.value;
-    if(inputToSearch.length > 2) {
-      getListFromInput(inputToSearch);
-    }
-  })
+    const inputToSearchArray =inputToSearch.split(" ");
+    const idArray = getAllWords(inputToSearchArray);
+    if (inputToSearchArray[0].length > 2) displayFiltersList(recipeListFromIdArray(idArray));
+  });
 }
 
 function displayTag() {
-  let container = document.querySelector('.filterTagContainer');
+  const container = document.querySelector(".filterTagContainer");
   const test = {
+    color: "#3282F7",
     name: "Coco",
-    color: "#3282F7"
   };
-  const tagToDisplay = templateTag(test['name'], test['color']);
+  const tagToDisplay = templateTag(test["name"], test["color"]);
   container.innerHTML += tagToDisplay;
 }
 
@@ -110,13 +110,13 @@ function templateTag(name, color) {
       <span class="far fa-times-circle align-middle filterTagIcon lh-1"></span>
     </span>
   `;
-return template
+  return template;
 }
 
 export {
   displayFilter,
   displayFiltersList,
-  toggleFilter,
+  displayTag,
   getFilterInput,
-  displayTag
-}
+  toggleFilter,
+};

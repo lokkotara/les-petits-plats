@@ -1,18 +1,21 @@
-import {initDataManager, 
-  getAllRecipes, 
-  normalizeWord, 
-  recipeListFromIdArray, 
+import {
+  displayFilter,
+  displayFiltersList,
+  getFilterInput,
+  toggleFilter,
+} from "../components/filter.js";
+
+import {
+  getAllRecipes,
+  getAllWords,
   getArrayFromInput,
   getFiltersList,
-  filterByText
-} from "../dataManager.js"
-
-import {displayFilter, 
-  toggleFilter, 
-  displayFiltersList, 
-  getFilterInput,
-  displayTag
-} from "../components/filter.js"
+  getHashIngredients,
+  initDataManager,
+  instantiateFilters,
+  normalizeWord,
+  recipeListFromIdArray,
+} from "../dataManager.js";
 
 let DOM;
 
@@ -25,56 +28,57 @@ export default async function injectPage(domTarget) {
   displayFiltersList();
   addFilterListener();
   getFilterInput();
-  displayTag();
+  getHashIngredients();
+  // displayTag();
 }
 function addFilterListener() {
   const containers = document.querySelectorAll(".filterContainer");
   containers.forEach(container => {
     const label = container.firstElementChild.firstElementChild,
-          span = label.firstElementChild,
-          icon = label.lastElementChild;
+      span = label.firstElementChild,
+      icon = label.lastElementChild;
     icon.addEventListener("click", toggleFilter.bind(null, span));
   });
 }
 
 function addSearchListener() {
-  const input = document.getElementById('searchInput');
-  input.addEventListener("input",()=> {
+  const input = document.getElementById("searchInput");
+  input.addEventListener("input",() => {
     getRecipesToDisplay();
     displayFiltersList();
-  })
+  });
 }
 
 function getRecipesToDisplay() {
   const word = getSearchInput();
-  if(word !== undefined && word.length>2) {
-    let arrayToShow = getArrayFromInput(word);
+  if (word !== undefined && word.length>2) {
+    const arrayToShow = getArrayFromInput(word);
     showAllRecipes(arrayToShow);
   }
 }
 
-  function showAllRecipes(recipesIdList) {
-    let content = "";
-    let recipes = [];
-    try {
-      if (recipesIdList === undefined) {
-        recipes = recipeListFromIdArray(getAllRecipes());
-        getFiltersList(getAllRecipes());
-      } else {
-        getAllRecipes(recipesIdList);
-        recipes = recipeListFromIdArray(recipesIdList);
-      }
-      for (let i = 0; i < recipes.length; i++) {
-        content += templateRecipe(recipes[i]);     
-      }
-    } catch (error) {
-      console.error(error);
+function showAllRecipes(recipesIdList) {
+  let content = "";
+  let recipes = [];
+  try {
+    if (recipesIdList === undefined) {
+      recipes = recipeListFromIdArray(getAllRecipes());
+      getFiltersList(getAllRecipes());
+    } else {
+      getAllRecipes(recipesIdList);
+      recipes = recipeListFromIdArray(recipesIdList);
     }
-    DOM.innerHTML = content;
+    for (let i = 0; i < recipes.length; i++) {
+      content += templateRecipe(recipes[i]);
+    }
+  } catch (error) {
+    console.error(error);
   }
+  DOM.innerHTML = content;
+}
 
-  function templateRecipe(recipe) {
-    return /*html*/`
+function templateRecipe(recipe) {
+  return /*html*/`
   <article class="recipeCard rounded d-flex flex-column mb-5 overflow-hidden">
     <div class="h-50">
       <img src="https://via.placeholder.com/380.jpg?text=${recipe.name} " alt="${recipe.name}" class="h-100 w-100">
@@ -96,51 +100,39 @@ function getRecipesToDisplay() {
     </div>
   </article>
     `;
-  }
+}
 
-  function displayIngredients(ingredients) {
-    let htmlContent = "";
-    for (let i = 0; i < ingredients.length; i++) {
-      const elt = ingredients[i];
-      htmlContent += `
+function displayIngredients(ingredients) {
+  let htmlContent = "";
+  for (let i = 0; i < ingredients.length; i++) {
+    const elt = ingredients[i];
+    htmlContent += `
       <li><span class="fw-bold">${elt.ingredient}</span>${elt.quantity  ? ": "+elt.quantity : ""} ${elt.unit ? elt.unit : ""}</li>
-      `
-    }
-    return htmlContent;
+      `;
   }
+  return htmlContent;
+}
 
-  function showFilters() {
-    const domTarget = document.querySelector('.filterContainerWrapper');
-    const filters = [
-      {
-        name: "Ingredients",
-        id: "ingredient",
-        list: [],
-        placeholder: "Rechercher un ingrédient",
-        color: "#3282F7"
-      }, {
-        name: "Appareils",
-        id: "appliance",
-        list: [],
-        placeholder: "Rechercher un appareil",
-        color: "#68D9A4"
-      }, {
-        name: "Ustensiles",
-        id: "ustensil",
-        list: [],
-        placeholder: "Rechercher un ustensile",
-        color: "#ED6454"
-      }
-    ];
-    for (let i = 0; i < filters.length; i++) {
-      const filter = filters[i];
-      domTarget.innerHTML += displayFilter(filter);
-      
-    }
+function showFilters() {
+  const domTarget = document.querySelector(".filterContainerWrapper");
+  const filters = instantiateFilters();
+  for (let i = 0; i < filters.length; i++) {
+    const filter = filters[i];
+    domTarget.innerHTML += displayFilter(filter);
   }
+}
 
-  function getSearchInput() {
-    let ingredient = document.getElementById('searchInput');
-    return normalizeWord(ingredient.value);
-
-  }
+function getSearchInput() {
+  const ingredient = document.getElementById("searchInput");
+  let inputToSearch;
+  ingredient.addEventListener("input", (event) => {
+    inputToSearch = event.target.value;
+    const inputToSearchArray =inputToSearch.split(" ");
+    const idArray = getAllWords(inputToSearchArray);
+    if (inputToSearchArray[0].length > 2) showAllRecipes(idArray);
+  });
+}
+// function getSearchInput() {
+//   const ingredient = document.getElementById("searchInput");
+//   return normalizeWord(ingredient.value);
+// }
