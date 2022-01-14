@@ -94,10 +94,20 @@ html {
 .filterChevron {
   cursor: pointer;
 }
-.filterTag {
-  /* width: 105px; */
-}
 .filterTagIcon {
   width: 21px;
   height: 21px;
+}
+#ingredientFilterListContainer {
+  -webkit-min-width: available;
+  min-width: -moz-available;
+}
+.filterTagContainer .ingredients {
+  background-color: #3282F7;
+}
+.filterTagContainer .ustensils {
+  background-color: #ED6454;
+}
+.filterTagContainer .appliance {
+  background-color: #68D9A4;
 }

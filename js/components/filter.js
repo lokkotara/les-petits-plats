@@ -1,122 +1,243 @@
-import {getAllWords, getFiltersList, getListFromInput, normalizeWord, recipeListFromIdArray} from "../dataManager.js";
+import {
+  addFilterTag,
+  closeAllExceptSelected,
+  getActiveFilter,
+  getAllWords,
+  getApplianceList,
+  getColorFromId,
+  getFiltersList,
+  getIngredientList,
+  getIngredientsList,
+  getListFromInput,
+  getUstensilsList,
+  normalizeWord,
+  recipeListFromIdArray,
+  removeFilterTag,
+  returnFilterArray
+} from "../dataManager.js";
 
-function displayFilter(filter) {
-  return `
-  <div class="filterContainer text-light  rounded d-flex align-items-center" style="background-color: ${filter.color};">
-    <label id="${filter.id}FilterLabel" for="${filter.id}" class="d-flex flex-column justify-content-between container position-relative">
-      <div class="d-flex justify-content-between align-items-center position-relative">
-        <span  id="${filter.id}FilterSpan" class="filterSpan">${filter.name}</span>
-        <input type="text" id="${filter.id}" placeholder="${filter.placeholder}" class="hidden filterInput"/>
-        <i class="fas fa-chevron-down filterChevron" id="${filter.id}-filter-icon"></i>
-      </div>
-      <div id="${filter.id}FilterListContainer"class="px-3 ms-0 hidden overflow-hidden position-absolute top-100"  style="background-color: ${filter.color};left:0;">
-        <ul class="${filter.id}FilterList list-unstyled d-flex flex-wrap mt-2" id="${filter.id}FilterList">
+import { exposeMethods } from "../tools.js";
+
+export default class Filter {
+  id;
+
+  name;
+
+  placeholder;
+
+  color;
+
+  $dropdown;
+
+  $list;
+
+  opened = false;
+
+  constructor(domTarget, filter) {
+    for (const [key, value] of Object.entries(filter)) {
+      this[key] = value;
+    }
+    exposeMethods({
+      deleteElement: this.deleteTag.bind(this),
+      selectElement: this.selectTag.bind(this),
+    });
+    this.initDom(domTarget);
+    this.renderFilter();
+  }
+
+  initDom(domTarget) {
+    this.DOM = document.createElement("div");
+    this.DOM.className =
+      "filterContainer text-light  rounded d-flex align-items-center";
+    this.DOM.style.background = this.color;
+    domTarget.appendChild(this.DOM);
+    this.$dropdown = document.createElement("label");
+    this.$dropdown.htmlFor = this.id;
+    this.$dropdown.id = this.id + "FilterLabel";
+    this.$dropdown.className =
+      "d-flex flex-column justify-content-between container position-relative";
+    // this.$dropdown.onclick = this.closeAll.bind(this);
+    this.DOM.appendChild(this.$dropdown);
+  }
+
+  watchChevron() {
+    const name = this.id+"-filter-icon";
+    const chevron = document.getElementById(name);
+    chevron.addEventListener("click",this.closeAll.bind(this));
+  }
+
+  dropdowntemplateOpened() {
+    this.$dropdown.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center position-relative">
+        <input type="text" id="${this.id}s" placeholder="${this.placeholder}" class="filterInput"/>
+        <i class="fas fa-chevron-up filterChevron" id="${this.id}-filter-icon"></i>
+    </div>
+    <div id="${this.id}FilterListContainer"class="px-3 ms-0 overflow-hidden position-absolute top-100"  style="background-color: ${this.color};left:0;">
+        <ul class="${this.id}FilterList list-unstyled d-flex flex-wrap mt-2" id="${this.id}FilterList">
         </ul>
-      </div>
-    </label>
-  </div>
-  `;
-}
-
-function toggleFilter(elt) {
-  const span = elt,
-    div = elt.parentNode,
-    label = div.parentNode,
-    icon = div.lastElementChild,
-    list = label.lastElementChild,
-    input = span.nextElementSibling;
-
-  label.parentNode.classList.toggle("open");
-  span.classList.toggle("hidden");
-  input.classList.toggle("hidden");
-  list.classList.toggle("hidden");
-  icon.classList.toggle("fa-chevron-down");
-  icon.classList.toggle("fa-chevron-up");
-}
-
-function displayFiltersList(recipesList) {
-  const recipes = recipesList !== undefined ? recipesList : getFiltersList();
-  const ingredientListContainer = document.getElementById("ingredientFilterList"),
-    applianceListContainer = document.getElementById("applianceFilterList"),
-    ustensilListContainer = document.getElementById("ustensilFilterList");
-  const ingredientList = [],
-    applianceList = [],
-    ustensilList = [];
-
-  recipes.forEach(recipe => {
-    recipe.ingredients.forEach(ingredient => {
-      ingredientList.push(normalizeWord(ingredient.ingredient));
-    });
-
-    applianceList.push(normalizeWord(recipe.appliance));
-
-    recipe.ustensils.forEach(ustensil => {
-      const id = recipe.id;
-      ustensilList.push(normalizeWord(ustensil));
-    });
-  });
-  const ingredientSortedList = [...new Set(ingredientList)].sort(),
-    applianceSortedList = [...new Set(applianceList)].sort(),
-    ustensilSortedList = [...new Set(ustensilList)].sort();
-  ingredientListContainer.innerHTML = templateFilterList(ingredientSortedList);
-  applianceListContainer.innerHTML = templateFilterList(applianceSortedList);
-  ustensilListContainer.innerHTML = templateFilterList(ustensilSortedList);
-}
-
-function templateFilterList(list) {
-  let htmlContent = "";
-  for (let i = 0; i < list.length; i++) {
-    const elt = list[i];
-    htmlContent += `
-    <li class="filterListItem"><span class="pe-3 itemSpan" name="${elt}">${elt}</span></li>
+    </div>
     `;
   }
-  return htmlContent;
-}
 
-function getFilterInput() {
-  const ingredient = document.getElementById("ingredient");
-  let inputToSearch;
-  ingredient.addEventListener("input", (event) => {
-    inputToSearch = event.target.value;
-    const inputToSearchArray =inputToSearch.split(" ");
-    const idArray = getAllWords(inputToSearchArray);
-    if (inputToSearchArray[0].length > 2) displayFiltersList(recipeListFromIdArray(idArray));
-  });
-}
+  dropdowntemplateClosed() {
+    this.$dropdown.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center position-relative">
+        <span  id="${this.id}FilterSpan" class="filterSpan">${this.name}</span>
+        <i class="fas fa-chevron-down filterChevron" id="${this.id}-filter-icon"></i>
+      </div>
+      <div id="${this.id}FilterListContainer"class="hidden px-3 ms-0 overflow-hidden position-absolute top-100"  style="background-color: ${this.color};left:0;">
+        <ul class="${this.id}FilterList list-unstyled d-flex flex-wrap mt-2" id="${this.id}FilterList">
+        </ul>
+    </div>
+    `;
+  }
 
-function displayTag() {
-  const container = document.querySelector(".filterTagContainer");
-  const test = {
-    color: "#3282F7",
-    name: "Coco",
-  };
-  const tagToDisplay = templateTag(test["name"], test["color"]);
-  container.innerHTML += tagToDisplay;
-}
+  /**
+   * [templateFilterList description]
+   *
+   * @param   {Array}  list  [list description]
+   * @param   {( "ingredients" | "ustensils" | "appliance")}  type  [type description]
+   *
+   * @return  {String}        [return description]
+   */
+  templateFilterList(list, type) {
+    let htmlContent = "";
+    for (let i = 0; i < list.length; i++) {
+      const elt = list[i];
+      htmlContent += /*html*/ `
+      <li class="filterListItem" onclick="selectElement('${elt}','${type}')"><span class="pe-3 itemSpan" name="${elt}">${elt}</span></li>
+      `;
+    }
+    return htmlContent;
+  }
 
-/**
- * Retourne le template  du tag sélectionné
- *
- * @param   {string}  name   Le nom correspondant au tag choisi
- * @param   {string}  color  La couleur correspondant à la liste de filtre à laquelle appartient le tag
- *
- * @return  {HTMLElement}         Retourne le tag
- */
-function templateTag(name, color) {
-  const template = `
-    <span class="filterTag btn text-light" style="background-color: ${color}">
+  renderFilter() {
+    if (this.opened) {
+      this.dropdowntemplateOpened();
+      this.updateList(this.id);
+      this.watchChevron();
+      return;
+    }
+    this.dropdowntemplateClosed();
+    this.watchChevron();
+  }
+
+  getStatus() {
+    return this.opened;
+  }
+
+  closeFilter() {
+    this.opened = false;
+    this.DOM.classList.remove("open");
+    this.renderFilter();
+  }
+
+  closeAll() {
+    closeAllExceptSelected(this.id);
+  }
+
+  closeAllFilters(id) {
+    if (this.id !== id) {
+      this.opened = false;
+      this.DOM.classList.remove("open");
+      this.renderFilter();
+    } else {
+      this.toggleFilter();
+    }
+  }
+
+  toggleFilter() {
+    this.opened = !this.opened;
+    this.DOM.classList.toggle("open");
+    this.renderFilter();
+  }
+
+  updateList(type) {
+    const filterName = this.id + "FilterList";
+    this.$list = document.getElementById(filterName);
+    let newList;
+    switch (type) {
+      case "ingredients":
+        newList = getIngredientsList();
+        this.$list.innerHTML = this.templateFilterList(newList, this.id);
+        break;
+      case "appliance":
+        newList = getApplianceList();
+        this.$list.innerHTML = this.templateFilterList(newList, this.id);
+        break;
+      case "ustensils":
+        newList = getUstensilsList();
+        this.$list.innerHTML = this.templateFilterList(newList, this.id);
+        break;
+      default:
+        console.error("Houston, on a un problème.");
+        break;
+    }
+  }
+
+  // function getFilterInput() {
+  //   const ingredient = document.getElementById("ingredients");
+  //   let inputToSearch;
+  //   ingredient.addEventListener("input", (event) => {
+  //     inputToSearch = event.target.value;
+  //     const inputToSearchArray = inputToSearch.split(" ");
+  //     const idArray = getAllWords(inputToSearchArray);
+  //     if (inputToSearchArray[0].length > 2) displayFiltersList(recipeListFromIdArray(idArray));
+  //   });
+  // }
+
+  displayTag() {
+    const tagListIngredient = getActiveFilter("ingredients");
+    const tagListAppliance = getActiveFilter("appliance");
+    const tagListUstensil = getActiveFilter("ustensils");
+    const container = document.querySelector(".filterTagContainer");
+    let temp = "";
+    tagListIngredient.forEach((value) => {
+      temp += this.templateTag(value, "ingredients");
+    });
+    tagListAppliance.forEach((value) => {
+      temp += this.templateTag(value, "appliance");
+    });
+    tagListUstensil.forEach((value) => {
+      temp += this.templateTag(value, "ustensils");
+    });
+    container.innerHTML = temp;
+  }
+
+  /**
+   * Retourne le template  du tag sélectionné
+   *
+   * @param   {string}  name   Le nom correspondant au tag choisi
+   * @param   {string}  color  La couleur correspondant à la liste de filtre à laquelle appartient le tag
+   *
+   * @return  {String}         Retourne le tag
+   */
+  templateTag(name, type) {
+    const template = /*html*/ `
+    <span class="filterTag btn text-light ${type}">
       <span class="lh-1">${name}</span>
-      <span class="far fa-times-circle align-middle filterTagIcon lh-1"></span>
+      <span class="far fa-times-circle align-middle filterTagIcon lh-1" onclick="deleteElement('${name}', '${type}')"></span>
     </span>
   `;
-  return template;
+    return template;
+  }
+
+  deleteTag(name, type) {
+    removeFilterTag(type, name);
+    this.displayTag();
+  }
+
+  selectTag(name, type) {
+    addFilterTag(type, name);
+    const color = getColorFromId(type);
+    this.displayTag(name, color);
+    closeAllExceptSelected();
+  }
 }
 
-export {
-  displayFilter,
-  displayFiltersList,
-  displayTag,
-  getFilterInput,
-  toggleFilter,
-};
+// export {
+//   displayFilter,
+//   displayTag,
+//   getFilterInput,
+//   toggleFilter,
+// };

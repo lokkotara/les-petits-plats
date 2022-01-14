@@ -1,11 +1,13 @@
-import {
-  displayFilter,
-  displayFiltersList,
-  getFilterInput,
-  toggleFilter,
-} from "../components/filter.js";
+// import {
+//   displayFilter,
+//   displayFiltersList,
+//   displayTag,
+//   getFilterInput,
+//   toggleFilter,
+// } from "../components/filter.js";
 
 import {
+  closeAllExceptSelected,
   getAllRecipes,
   getAllWords,
   getArrayFromInput,
@@ -15,8 +17,10 @@ import {
   instantiateFilters,
   normalizeWord,
   recipeListFromIdArray,
+  saveAllFilters,
 } from "../dataManager.js";
 
+import Filter from "../components/filter.js";
 let DOM;
 
 export default async function injectPage(domTarget) {
@@ -25,27 +29,28 @@ export default async function injectPage(domTarget) {
   showAllRecipes();
   addSearchListener();
   showFilters();
-  displayFiltersList();
-  addFilterListener();
-  getFilterInput();
-  getHashIngredients();
   // displayTag();
+  // displayFiltersList();
+  // addFilterListener();
+  // getFilterInput();
+  getHashIngredients();
+  // watchClick();
 }
-function addFilterListener() {
-  const containers = document.querySelectorAll(".filterContainer");
-  containers.forEach(container => {
-    const label = container.firstElementChild.firstElementChild,
-      span = label.firstElementChild,
-      icon = label.lastElementChild;
-    icon.addEventListener("click", toggleFilter.bind(null, span));
-  });
-}
+// function addFilterListener() {
+//   const containers = document.querySelectorAll(".filterContainer");
+//   containers.forEach(container => {
+//     const label = container.firstElementChild.firstElementChild,
+//       span = label.firstElementChild,
+//       icon = label.lastElementChild;
+//     icon.addEventListener("click", toggleFilter.bind(null, span));
+//   });
+// }
 
 function addSearchListener() {
   const input = document.getElementById("searchInput");
   input.addEventListener("input",() => {
     getRecipesToDisplay();
-    displayFiltersList();
+    // displayFiltersList();
   });
 }
 
@@ -63,7 +68,6 @@ function showAllRecipes(recipesIdList) {
   try {
     if (recipesIdList === undefined) {
       recipes = recipeListFromIdArray(getAllRecipes());
-      getFiltersList(getAllRecipes());
     } else {
       getAllRecipes(recipesIdList);
       recipes = recipeListFromIdArray(recipesIdList);
@@ -116,10 +120,13 @@ function displayIngredients(ingredients) {
 function showFilters() {
   const domTarget = document.querySelector(".filterContainerWrapper");
   const filters = instantiateFilters();
+  const array = [];
   for (let i = 0; i < filters.length; i++) {
     const filter = filters[i];
-    domTarget.innerHTML += displayFilter(filter);
+    const newFilter = new Filter(domTarget, filter);
+    array.push(newFilter);
   }
+  saveAllFilters(array);
 }
 
 function getSearchInput() {
@@ -129,10 +136,7 @@ function getSearchInput() {
     inputToSearch = event.target.value;
     const inputToSearchArray =inputToSearch.split(" ");
     const idArray = getAllWords(inputToSearchArray);
+    console.log(idArray);
     if (inputToSearchArray[0].length > 2) showAllRecipes(idArray);
   });
 }
-// function getSearchInput() {
-//   const ingredient = document.getElementById("searchInput");
-//   return normalizeWord(ingredient.value);
-// }

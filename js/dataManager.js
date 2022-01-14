@@ -4,7 +4,7 @@ let src;
 const filters = [
   {
     color         : "#3282F7",
-    id            : "ingredient",
+    id            : "ingredients",
     name          : "Ingredients",
     placeholder   : "Rechercher un ingrédient",
   }, {
@@ -14,18 +14,22 @@ const filters = [
     placeholder   : "Rechercher un appareil",
   }, {
     color         : "#ED6454",
-    id            : "ustensil",
+    id            : "ustensils",
     name          : "Ustensiles",
-    placeholder   : "Rechercher un ustensile",
+    placeholder   : "Rechercher un ustensil",
   }
 ];
-
+let filterArray = [];
 const activesFilters = {
   appliance     : [],
   ingredients   : [],
   text          : "",
   ustensils     : [],
 };
+
+const ingredientList = [],
+      applianceList = [],
+      ustensilList = [];
 
 const applianceHashed   = {};
 const ustensilsHashed   = {};
@@ -44,14 +48,26 @@ async function initDataManager() {
     recipes           = await response.json();
     textsHashed       = getHashRecipeList();
     prevIdRecipes     = getAllId();
-    // debug();
   } catch (error) {
     console.error(error);
   }
 }
 
 function getFiltersList() {
-  return recipes;
+  console.log(prevIdRecipes);
+  return recipeListFromIdArray(prevIdRecipes);
+}
+
+function getActiveFilter(type) {
+  return activesFilters[type];
+}
+
+function getActiveIngredient() {
+  return getActiveFilter("ingredient");
+}
+
+function getActiveAppliance() {
+  return getActiveFilter("appliance");
 }
 
 function setDataManagerSource(source) {
@@ -65,17 +81,6 @@ function setDataManagerSource(source) {
  */
 function instantiateFilters() {
   return filters;
-}
-
-/**
- *Fonction de test pour peupler artificiellemnt les filtres actifs
- * Ne reste pas si le code est fonctionnel
- */
-function debug(){
-  activesFilters.ingredients = ["Fraise", "Lait"];
-  // activesFilters.text = ["Coco", "Lait"];
-  // activesFilters.text = "Coco";
-  // console.log(getAllRecipes())
 }
 
 /**
@@ -109,6 +114,65 @@ function filterByIngredient(source){
 
 }
 
+function getIngredientsList() {
+  const recipes = recipeListFromIdArray(prevIdRecipes);
+  recipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredient) => {
+      ingredientList.push(normalizeWord(ingredient.ingredient));
+    });
+  });
+  const ingredientSortedList = [...new Set(ingredientList)].sort();
+  return ingredientSortedList;
+}
+
+function getApplianceList() {
+  const recipes = recipeListFromIdArray(prevIdRecipes);
+  recipes.forEach((recipe) => {
+    applianceList.push(normalizeWord(recipe.appliance));
+  });
+  const applianceSortedList = [...new Set(applianceList)].sort();
+  return applianceSortedList;
+}
+
+function getUstensilsList() {
+  const recipes = recipeListFromIdArray(prevIdRecipes);
+  recipes.forEach((recipe) => {
+    recipe.ustensils.forEach((ustensil) => {
+      ustensilList.push(normalizeWord(ustensil));
+    });
+  });
+  const ustensilsSortedList = [...new Set(ustensilList)].sort();
+  return ustensilsSortedList;
+}
+
+function saveAllFilters(array) {
+  filterArray = array;
+}
+
+function closeAllExceptSelected(id) {
+  filterArray.forEach(filter => {
+    if (filter.id === id) {
+      filter.toggleFilter();
+    } else {
+      filter.closeFilter();
+    }
+  });
+}
+
+function returnFilterArray() {
+  return filterArray;
+}
+
+function getColorFromId(id) {
+  let color = "";
+  filters.forEach(filter => {
+    if (filter.id === id) {
+      color = filter.color;
+    }
+  });
+  return color;
+}
+
 function addFilterTag(type, value){
   activesFilters[type].push(value);
   console.log(activesFilters[type]);
@@ -117,9 +181,6 @@ function addFilterTag(type, value){
 function removeFilterTag(type, value){
   const index = activesFilters[type].indexOf(value);
   activesFilters[type].splice(index, 1);
-  switch (type){
-    case "ingredients" :
-  }
 }
 
 function getAllRecipes() {
@@ -223,11 +284,11 @@ function getHashRecipeList() {
 }
 
 function getHashIngredients() {
-  let essai;
+  let list;
   recipes.forEach(recipe => {
-    essai = getHashIngredientList(recipe, ingredientsHashed);
+    list = getHashIngredientList(recipe, ingredientsHashed);
   });
-  return essai;
+  return list;
 }
 
 /**
@@ -321,20 +382,25 @@ function normalizeWord(word) {
 //   return getWithoutActivesFilters("ustensils");
 // }
 
-// /**
-//  * Permet de retourner la liste du filtre sans l'occurence sur laquelle on vient de cliquer
-//  *
-//  * @param   {[type]}  type  [type description]
-//  *
-//  * @return  {[type]}        [return description]
-//  */
-// function getWithoutActivesFilters(type){
-//   const list = Object.keys(type+"List");
-//   activesFilters[type].forEach(filter => {
-//     list.splice(list.indexOf(filter), 1);
-//   });
-//   return list;
-// }
+function getIngredientList(){
+  return getWithoutActivesFilters("ingredients");
+}
+
+/**
+ * Permet de retourner la liste du filtre sans l'occurence sur laquelle on vient de cliquer
+ *
+ * @param   {[type]}  type  [type description]
+ *
+ * @return  {[type]}        [return description]
+ */
+function getWithoutActivesFilters(type){
+  // const list = Object.keys(type+"List");
+  console.log(activesFilters[type]);
+  // activesFilters[type].forEach(filter => {
+  //   list.splice(list.indexOf(filter), 1);
+  // });
+  // return list;
+}
 
 // function getRecipeList(array) {
 //   const tempArray = [];
@@ -352,18 +418,31 @@ function normalizeWord(word) {
 // }
 
 export {
-  initDataManager,
-  getAllRecipes,
-  normalizeWord,
-  setDataManagerSource,
-  recipeListFromIdArray,
-  filterByText,
-  getAllWords,
-  getArrayFromInput,
-  // getUstensilsList,
   // getRecipeList,
-  getListFromInput,
-  instantiateFilters,
+  // getUstensilsList,
+  addFilterTag,
+  closeAllExceptSelected,
+  filterByText,
+  getActiveFilter,
+  getActiveAppliance,
+  getActiveIngredient,
+  getAllRecipes,
+  getAllWords,
+  getApplianceList,
+  getArrayFromInput,
+  getColorFromId,
   getFiltersList,
-getHashIngredients
+  getHashIngredients,
+  getIngredientList,
+  getIngredientsList,
+  getListFromInput,
+  getUstensilsList,
+  initDataManager,
+  instantiateFilters,
+  normalizeWord,
+  recipeListFromIdArray,
+  returnFilterArray,
+  removeFilterTag,
+  saveAllFilters,
+  setDataManagerSource,
 };
