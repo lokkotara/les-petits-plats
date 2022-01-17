@@ -54,7 +54,7 @@ async function initDataManager() {
 }
 
 function getFiltersList() {
-  console.log(prevIdRecipes);
+  // console.log(prevIdRecipes);
   return recipeListFromIdArray(prevIdRecipes);
 }
 
