@@ -1,0 +1,131 @@
+<mxfile host="65bd71144e">
+    <diagram id="OFz9srESVCx5iRZtTfuI" name="Page-1">
+        <mxGraphModel dx="1374" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="44" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=3;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="20" width="570" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="SearchBar input" style="rounded=0;whiteSpace=wrap;html=1;align=right;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="530" height="50.12658227848101" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" style="edgeStyle=none;html=1;entryX=0;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="3" target="29" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="FilterContainer" style="rounded=0;whiteSpace=wrap;html=1;align=right;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="165.31645569620252" width="530" height="75.18987341772153" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="ingredientFilter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="54.72222222222222" y="177.84810126582278" width="88.33333333333333" height="50.12658227848101" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="applianceFilter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="157.77777777777777" y="177.84810126582278" width="88.33333333333333" height="50.12658227848101" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="ustensilFilter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
+                    <mxGeometry x="260.83333333333337" y="177.84810126582278" width="88.33333333333333" height="50.12658227848101" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="7" target="30" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="TagContainer" style="rounded=0;whiteSpace=wrap;html=1;align=right;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="98.48101265822785" width="530" height="58.48101265822785" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Tag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="53.986111111111114" y="104.74683544303797" width="74.34722222222221" height="45.94936708860759" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Tag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="135.69444444444446" y="104.74683544303797" width="74.34722222222221" height="45.94936708860759" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="rounded=0;whiteSpace=wrap;html=1;align=right;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="257.22" width="530" height="452.78" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="55.458333333333336" y="315.69620253164555" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="Tag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
+                    <mxGeometry x="216.66666666666666" y="104.74683544303797" width="74.34722222222221" height="45.94936708860759" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="232.125" y="315.69620253164555" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="408.7916666666667" y="315.69620253164555" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="231.38888888888889" y="516.2025316455696" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="408.05555555555554" y="516.2025316455696" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="recipe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="54.72222222222222" y="516.2025316455696" width="147.22222222222223" height="183.79746835443035" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="recipesContainer" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="482.39888888888885" y="265.56962025316454" width="73.61111111111111" height="25.063291139240505" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="Index.js" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#a0522d;fontColor=#ffffff;strokeColor=#6D1F00;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="610" width="80" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="FilterManager" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#6d8764;strokeColor=#3A5431;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="420" width="80" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="TagManager" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="240.51" width="80" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="680" y="60" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" parent="31" vertex="1">
+                    <mxGeometry x="10" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="DataManager" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="31" vertex="1">
+                    <mxGeometry y="34.75" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="Utilisateur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;gradientColor=#97d077;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="800" width="60" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="Utilisateur" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;strokeWidth=3;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="750" width="200" height="180" as="geometry">
+                        <mxRectangle x="170" y="750" width="90" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="39" value="consulter les recettes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="38" vertex="1">
+                    <mxGeometry y="30" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="sélectionner un filtre" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="38" vertex="1">
+                    <mxGeometry y="60" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="faire une recherche par titre, ingredient ou description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="38" vertex="1">
+                    <mxGeometry y="90" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="retirer un tag" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="38" vertex="1">
+                    <mxGeometry y="120" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="retirer un tag" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="38" vertex="1">
+                    <mxGeometry y="150" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="FilterManager" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;strokeWidth=3;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="380" width="200" height="180" as="geometry">
+                        <mxRectangle x="800" y="400" width="90" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="48" value="récupérer la liste par rapport aux recettes restantes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="47" vertex="1">
+                    <mxGeometry y="30" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="sélectionner un filtre" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="47" vertex="1">
+                    <mxGeometry y="60" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="faire une recherche par titre, ingredient ou description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="47" vertex="1">
+                    <mxGeometry y="90" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="retirer un tag" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="47" vertex="1">
+                    <mxGeometry y="120" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="retirer un tag" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" parent="47" vertex="1">
+                    <mxGeometry y="150" width="200" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

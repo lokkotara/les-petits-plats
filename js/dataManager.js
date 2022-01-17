@@ -28,8 +28,8 @@ const activesFilters = {
 };
 
 const ingredientList = [],
-      applianceList = [],
-      ustensilList = [];
+  applianceList = [],
+  ustensilList = [];
 
 const applianceHashed   = {};
 const ustensilsHashed   = {};
